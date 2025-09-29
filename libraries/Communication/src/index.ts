@@ -1,11 +1,12 @@
-import { Ops } from './consts';
+import { gamemodeIdsWithoutAiming, Ops } from './consts';
 import { floatToBytes, encodeStringMessage, getIdentifier, bytesToFloat } from './encoding';
-import { Callback, Message } from './types';
+import { Callback, Message, MessageState } from './types';
 import { isUint8 } from './util';
 
 let sending = false;
 let pendingAngle = 0;
 let ignoreNextAngle = false;
+let noAiming = false;
 
 function sendAngle(angle: number) {
   api.net.send("AIMING", { angle });
@@ -13,44 +14,79 @@ function sendAngle(angle: number) {
 
 function sendMessages(messages: number[]) {
   sending = true;
+
   for (const message of messages) {
     ignoreNextAngle = true;
     sendAngle(message);
   }
+  
   sending = false;
-  sendAngle(pendingAngle);
+  if (!noAiming) sendAngle(pendingAngle);
 }
-
 
 api.net.onLoad((_, gamemode) => {
   const myId = api.stores.network.authId;
+  noAiming = gamemodeIdsWithoutAiming.includes(gamemode);
 
   //Prevent real angles from being overrided by messages
-  api.net.on("send:AIMING", (message, editFn) => {
-    if (!sending) return;
+  if (!noAiming) {
+    api.net.on("send:AIMING", (message, editFn) => {
+      if (!sending) return;
 
-    if (ignoreNextAngle) {
-      ignoreNextAngle = false;
-      return;
-    }
+      if (ignoreNextAngle) {
+        ignoreNextAngle = false;
+        return;
+      }
 
-    pendingAngle = message.angle;
-    editFn(null);
-  });
+      pendingAngle = message.angle;
+      editFn(null);
+    });
+  }
 
+  const messageStates = new Map<any, MessageState>;
 
   api.net.room.state.characters.onAdd((char: any) => {
     if (char.id === myId) return;
 
     char.projectiles.listen('aimAngle', (angle: number) => {
+      if (angle === 0) return;
+
       const bytes = floatToBytes(angle);
       const identifierBytes = bytes.slice(0, 4);
       const identifierString = JSON.stringify(identifierBytes);
 
       const callbacksForIdentifier = callbacks.get(identifierString);
-      if (!callbacksForIdentifier) return;
+
+      if (callbacksForIdentifier) {
+        const op: Ops = identifierBytes[4];
+
+        if (op === Ops.TransmittingBoolean) {
+          callbacksForIdentifier.forEach(({ callback }) => {
+            callback(bytes[5] === 1, char);
+          })
+        } else if (op === Ops.TransmittingByteInteger) {
+          callbacksForIdentifier.forEach(({ callback }) => {
+            callback(bytes[5], char);
+          })
+        } else {
+          if (op === Ops.)
+        }
+      } else if (messageStates.) {
+
+      }
+
 
       
+
+      if (!messageStates.has(char)) {
+        messageStates.set(char, {
+          identifierString,
+          charsRemaining: 0,
+          message
+        })
+      }
+
+      if (!callbacksForIdentifier)
     })
   })
 })
@@ -60,13 +96,6 @@ const callbacks = new Map<string, {
   callbackId: number,
   callback: Callback
 }[]>();
-
-const messageStream = new Map<string, Map<string, {
-  message: string;
-  charsRemaining: string;
-}>>;
-
-
 
 export class Communication {
   identifier: number[];
@@ -81,8 +110,10 @@ export class Communication {
         if (isUint8(message)) {
           const bytes = [
             ...this.identifier,
-            
-          ]
+            Ops.TransmittingByteInteger,
+            message
+          ];
+
         }
         const messages = <number[]>encodeMessage(this.identifier, Ops.TransmittingNumber, String(message));
         sendMessages(messages);
@@ -94,11 +125,10 @@ export class Communication {
         break;
       }
       case 'boolean': {
-        const bytes = [
+        const bytes: number[] = [
           ...this.identifier,
-          message
-            ? Ops.TransmittingTrueBoolean
-            : Ops.TransmittingFalseBoolean
+          Ops.TransmittingBoolean,
+          message ? 1 : 0
         ];
 
         sendAngle(bytesToFloat(bytes));

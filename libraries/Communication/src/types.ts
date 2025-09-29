@@ -6,3 +6,9 @@ export type Message =
   | { [key: string]: Message };
 
 export type Callback = (message: Message, player: any) => void;
+
+export interface MessageState {
+  identifierString: string;
+  message: string;
+  charsRemaining: number;
+}

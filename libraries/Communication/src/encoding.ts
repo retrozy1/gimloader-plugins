@@ -1,5 +1,10 @@
 import { Ops } from "./consts";
 
+/*
+  How messages are sent:
+
+*/
+
 // always requires 7 bytes as input
 export function bytesToFloat(bytes: number[]) {
   let buffer = new ArrayBuffer(8);
@@ -22,37 +27,34 @@ export function floatToBytes(float: number) {
   return Array.from(byteView);
 }
 
-//Deterministically generates 4 numbers from a string (plugin name) as an identifier for who is sending messages
-export function getIdentifier(name: string) {
+//Deterministically generates 2 numbers from a string (plugin name) as an identifier for who is sending messages
+export function getIdentifier(pluginName: string) {
   let hash = 0;
-
-  for (let i = 0; i < name.length; i++) {
-    hash = (hash * 31 + name.charCodeAt(i)) >>> 0;
+  for (let i = 0; i < pluginName.length; i++) {
+    const charCode = pluginName.charCodeAt(i);
+    hash = (hash * 31 + charCode) | 0;
   }
 
+  const uInt32Hash = hash >>> 0;
+
   return [
-    (hash >>> 24) & 0xff,
-    (hash >>> 16) & 0xff,
-    (hash >>> 8) & 0xff,
-    hash & 0xff,
+    (uInt32Hash >>> 24) & 0xFF,
+    (uInt32Hash >>> 16) & 0xFF,
+    (uInt32Hash >>> 8) & 0xFF,
+    uInt32Hash & 0xFF
   ];
 }
 
-export function encodeStringMessage(identifier: number[], message: string, activeOffsets?: number[]) {
+
+
+export function encodeStringMessage(identifier: number[], op: Ops, message: string) {
   let codes = message.split('').map(c => c.charCodeAt(0));
   codes = codes.filter(c => c < 256);
-  if (codes.length === 0) return;
 
   let charsLow = codes.length & 0xff;
   let charsHigh = (codes.length & 0xff00) >> 8;
 
-  const arr = new Uint8Array(1);
-  let offset = crypto.getRandomValues(arr)[0];
-  while (activeOffsets?.includes(offset)) {
-    offset = crypto.getRandomValues(arr)[0];
-  }
-
-  let header = [...identifier, offset, charsHigh, charsLow];
+  let header = [...identifier, op, charsHigh, charsLow];
 
   let messages: number[] = [bytesToFloat(header)];
 
@@ -68,8 +70,5 @@ export function encodeStringMessage(identifier: number[], message: string, activ
     messages.push(bytesToFloat(msg));
   }
 
-  return {
-    messages,
-    offset
-  };
+  return messages;
 }
