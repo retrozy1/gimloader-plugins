@@ -19,7 +19,7 @@ function sendMessages(messages: number[]) {
     ignoreNextAngle = true;
     sendAngle(message);
   }
-  
+
   sending = false;
   if (!noAiming) sendAngle(pendingAngle);
 }
@@ -63,30 +63,60 @@ api.net.onLoad((_, gamemode) => {
         if (op === Ops.TransmittingBoolean) {
           callbacksForIdentifier.forEach(({ callback }) => {
             callback(bytes[5] === 1, char);
-          })
+          });
         } else if (op === Ops.TransmittingByteInteger) {
           callbacksForIdentifier.forEach(({ callback }) => {
             callback(bytes[5], char);
-          })
+          });
         } else {
-          if (op === Ops.)
+          const high = bytes[5];
+          const low = bytes[6];
+
+          messageStates.set(char, {
+            message: '',
+            charsRemaining: Math.min(1000, (high << 8) + low),
+            identifierString,
+            op
+          });
         }
-      } else if (messageStates.) {
+      } else if (messageStates.has(char)) {
+        const state = messageStates.get(char)!;
 
+        // decode the message
+        for (let i = 0; i < Math.min(7, state.charsRemaining); i++) {
+          state.message += String.fromCharCode(bytes[i]);
+        }
+        state.charsRemaining -= 7;
+
+        if (state.charsRemaining <= 0) {
+          const stateCallbacks = callbacks.get(state.identifierString);
+          if (!stateCallbacks) return;
+
+          let message: Message;
+
+          //Parse the message based on the op
+          switch (state.op) {
+            case Ops.TransmittingNumber: {
+              message = Number(state.message);
+              break;
+            }
+            case Ops.TransmittingObject: {
+              message = JSON.parse(state.message);
+              break;
+            }
+            case Ops.TransmittingString: {
+              message = state.message;
+              break;
+            }
+          }
+
+          stateCallbacks.forEach(({ callback }) => {
+            callback(message, char);
+          });
+
+          callbacks.delete(char);
+        }
       }
-
-
-      
-
-      if (!messageStates.has(char)) {
-        messageStates.set(char, {
-          identifierString,
-          charsRemaining: 0,
-          message
-        })
-      }
-
-      if (!callbacksForIdentifier)
     })
   })
 })
@@ -97,25 +127,28 @@ const callbacks = new Map<string, {
   callback: Callback
 }[]>();
 
-export class Communication {
+export class Communications {
   identifier: number[];
 
-  constructor (pluginName: string) {
+  constructor(pluginName: string) {
     this.identifier = getIdentifier(pluginName);
   }
 
   send(message: Message) {
     switch (typeof message) {
       case 'number': {
+        //Send in one message if the number is Uint8
         if (isUint8(message)) {
           const bytes = [
             ...this.identifier,
             Ops.TransmittingByteInteger,
             message
           ];
-
+          sendMessages([bytesToFloat(bytes)]);
+          return;
         }
-        const messages = <number[]>encodeMessage(this.identifier, Ops.TransmittingNumber, String(message));
+
+        const messages = <number[]>encodeStringMessage(this.identifier, Ops.TransmittingNumber, String(message));
         sendMessages(messages);
         break;
       }
@@ -135,7 +168,7 @@ export class Communication {
         break;
       }
       case 'object': {
-        const messages = <number[]>encodeMessage(this.identifier, Ops.TransmittingString, JSON.stringify(message));
+        const messages = <number[]>encodeStringMessage(this.identifier, Ops.TransmittingString, JSON.stringify(message));
         sendMessages(messages);
         break;
       }

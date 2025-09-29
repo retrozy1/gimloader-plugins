@@ -4,9 +4,11 @@ const pkg = JSON.parse(fs.readFileSync('./package.json', 'utf-8'));
 
 /** @type {import('@gimloader/build').Config} */
 export default {
-    input: "./src/index.ts",
-    name: "DUIManhunt",
-    description: "Manhunt for Dig It Up",
-    author: "retrozy",
-    version: pkg.version
+  input: './src/index.ts',
+  name: 'DUIManhunt',
+  description: pkg.description,
+  author: pkg.author,
+  version: pkg.version,
+  gamemodes: ['mining'],
+  libs: ['Communication | https://raw.githubusercontent.com/retrozy1/Gimloader-Plugins/refs/heads/main/libraries/Communication/src/build/build.js']
 }
