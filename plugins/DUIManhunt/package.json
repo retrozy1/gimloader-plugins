@@ -1,0 +1,15 @@
+{
+  "name": "duimanhunt",
+  "version": "1.0.0",
+  "description": "Manhunt for Dig It Up",
+  "type": "module",
+  "scripts": {
+    "build": "gl build",
+    "serve": "gl serve"
+  },
+  "author": "retrozy",
+  "devDependencies": {
+    "@gimloader/build": "^1.1.1",
+    "@types/gimloader": "^1.8.0"
+  }
+}
