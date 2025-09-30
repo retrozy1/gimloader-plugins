@@ -5,7 +5,8 @@
   "type": "module",
   "scripts": {
     "build": "gl build",
-    "serve": "gl serve"
+    "serve": "gl serve",
+    "prepare": ""
   },
   "author": "retrozy"
 }

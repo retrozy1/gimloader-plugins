@@ -1,6 +1,6 @@
 {
   "name": "duimanhunt",
-  "version": "1.0.0",
+  "version": "0.0.0",
   "description": "Manhunt for Dig It Up",
   "type": "module",
   "scripts": {
@@ -9,6 +9,7 @@
   },
   "author": "retrozy",
   "devDependencies": {
+    "@tsconfig/svelte": "^5.0.5",
     "svelte": "^5.39.6"
   }
 }

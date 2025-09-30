@@ -1,6 +1,6 @@
 import { gamemodeIdsWithoutAiming, Ops } from './consts';
 import { floatToBytes, encodeStringMessage, getIdentifier, bytesToFloat } from './encoding';
-import { Callback, Message, MessageState } from './types';
+import type { Callback, Message, MessageState } from './types';
 import { isUint8 } from './util';
 
 let sending = false;
