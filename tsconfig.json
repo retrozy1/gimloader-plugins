@@ -1,0 +1,14 @@
+{
+  "compilerOptions": {
+    "strict": false,
+    "target": "es2022",
+    "moduleResolution": "bundler",
+    "jsx": "preserve",
+    "verbatimModuleSyntax": true,
+    "noEmit": true
+  },
+  "include": [
+    "./plugins/**/*.ts",
+    "./libraries/**/*.ts"
+  ]
+}
