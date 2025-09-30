@@ -1,6 +1,7 @@
 import { pluginName } from "./consts";
 import global from './global.svelte';
 import { Ops, Types, type Payload } from "./messages";
+import Settings from './Settings.svelte';
 
 api.net.onLoad(() => {
   const Communications = api.lib('Communications').Communications;
@@ -39,7 +40,11 @@ api.net.onLoad(() => {
 
   
 });
+const div = document.createElement('div');
+const settings = new Settings({
+  target: div
+});
 
-function start() {
-
-}
+api.openSettingsMenu(() => {
+  api.UI.showModal()
+})
