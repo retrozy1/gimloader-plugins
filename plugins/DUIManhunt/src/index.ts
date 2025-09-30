@@ -11,6 +11,7 @@ enum Types {
   SettingsPatch
 }
 
+//The booleans are true because they would be ommited if false (to reduce buffer)
 interface Settings {
   allowGuestEdits: boolean;
   //Everyone else in the lobby would be the runners so it only includes hunter IDs
@@ -18,13 +19,16 @@ interface Settings {
   hunterIds: number[];
   hitRange: number;
   runnersCanHit?: true;
+  frozenUntilRunnerMoves?: true;
   friendlyFire?: true;
 }
 
-type Payloads =
-  | [Types.HitRequest, number, number] //Sequence number, player ID to hit
-  | [Types.HitConfirm, number] //Sequence number
-  | [Types.HitDeny, number] //Sequence number
+type Payload =
+  | [Types.HitRequest, number, number] //[Hit request ID, player ID to hit]
+  | [Types.HitConfirm, number] //[Hit request ID]
+  | [Types.HitDeny, number] //[Hit request ID]
+  | [Types.Settings, Settings] //[Full settings for game]
+  | [Types.SettingsPatch, Partial<Settings>] //[The settings that updated. Clients will calculate the new settings based on the initial settings]
 
 
 api.net.onLoad(() => {
@@ -33,7 +37,7 @@ api.net.onLoad(() => {
   comms.send(Ops.IHaveManhunt);
 
   const playersWithManhunt = new Set<any>([/*ME*/]);
-  const pendingHits
+  const pendingHits = new Set<number>;
 
   comms.onMessage((message, player) => {
     if (typeof message === 'number') {
@@ -46,7 +50,7 @@ api.net.onLoad(() => {
         }
       }
     } else {
-      const [type, payload]: [Types, any] = message;
+      const [type, payload]: [Types, Payload] = message;
 
       switch (type) {
         case Types.HitRequest: {
