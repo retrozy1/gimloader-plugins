@@ -5,6 +5,8 @@ export interface Settings {
   //I might be able to just index players if they are in order
   runnerIds: string[];
   hitRange: number;
+  runnerHealth: number;
+  hunterHealth: number;
   runnersCanHit?: true;
   frozenUntilRunnerMoves?: true;
   friendlyFire?: true;

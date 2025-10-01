@@ -1,13 +1,9 @@
 import type { Settings } from "./types";
 
-//Ops don't have payloads and types have payloads
-//Damage[Amount] are ops and not type-payloads so they can be transmitted in one buffer
+//The ops are 101+ so I can send a normal number for "I took damage" for 1/5/25/100 damages
 export enum Ops {
-  IHaveManhunt,
-  Damage1,
-  Damage5,
-  Damage25,
-  Damage100
+  IHaveManhunt = 101,
+  TurningOffManhunt
 }
 
 export enum Types {
