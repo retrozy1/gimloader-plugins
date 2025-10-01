@@ -10,5 +10,5 @@ export default {
   author: pkg.author,
   version: pkg.version,
   gamemodes: ['mining'],
-  libs: ['Communication | https://raw.githubusercontent.com/retrozy1/Gimloader-Plugins/refs/heads/main/libraries/Communication/src/build/build.js']
+  libs: ['Communication | https://raw.githubusercontent.com/retrozy1/gimloader-plugins/refs/heads/main/libraries/Communication/src/build/build.js']
 }

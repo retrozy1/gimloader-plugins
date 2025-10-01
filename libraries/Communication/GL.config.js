@@ -9,5 +9,6 @@ export default {
   description: pkg.description,
   author: pkg.author,
   version: pkg.version,
-  gamemodes: ['2d']
+  gamemodes: ['2d'],
+  isLibrary: true
 }

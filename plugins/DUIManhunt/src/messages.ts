@@ -1,21 +1,20 @@
 import type { Settings } from "./types";
 
 //Ops don't have payloads and types have payloads
+//Damage[Amount] are ops and not type-payloads so they can be transmitted in one buffer
 export enum Ops {
-  IHaveManhunt
+  IHaveManhunt,
+  Damage1,
+  Damage5,
+  Damage25,
+  Damage100
 }
 
 export enum Types {
-  HitRequest,
-  HitConfirm,
-  HitDeny,
   Settings,
   SettingsPatch
 }
 
 export type Payload =
-  | [Types.HitRequest, number, number] //[Hit request ID, player ID to hit]
-  | [Types.HitConfirm, number] //[Hit request ID]
-  | [Types.HitDeny, number] //[Hit request ID]
   | [Types.Settings, Settings] //[Full settings for game]
-  | [Types.SettingsPatch, Partial<Settings>] //[The settings that updated. Clients will calculate the new settings based on the initial settings]
+  | [Types.SettingsPatch, Partial<Settings>]; //[The settings that updated. Clients will calculate the new settings based on the initial settings]
