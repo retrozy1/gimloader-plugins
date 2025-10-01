@@ -1,12 +1,16 @@
 {
   "name": "communication",
   "version": "1.0.0",
-  "description": "Communication between different clients in 2D gamemodes",
+  "description": "Send and listen for arbitrary messages between different clients in 2D gamemodes",
   "type": "module",
   "scripts": {
-    "build": "gl build",
-    "serve": "gl serve",
-    "prepare": ""
+    "build": "npm run build:script && node run build:types",
+    "build:script": "gl build",
+    "build:types": "tsc",
+    "serve": "gl serve"
   },
-  "author": "retrozy"
+  "author": "retrozy",
+  "devDependencies": {
+    "typescript": "^5.9.3"
+  }
 }

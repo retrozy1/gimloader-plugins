@@ -5,6 +5,8 @@ import { Ops, Types, type Payload } from "./messages";
 import Settings from './Settings.svelte';
 import type { notification } from "antd";
 
+type Notification = typeof notification;
+
 api.net.onLoad(() => {
   const Communications = api.lib('Communications').Communications;
   const comms = new Communications(pluginName);
@@ -28,12 +30,12 @@ api.net.onLoad(() => {
         }
         case Ops.TurningOffManhunt: {
           playerIdsWithManhunt.delete(player.id);
-          if (runtime) {
-            (api.notification as typeof notification).error({
-              message: `${player.name} has turned off manhunt. Manhunt is disabled.`
-            })
-          }
-          runtime?.stop();
+          if (!runtime) return;
+
+          (api.notification as Notification).error({
+            message: `${player.name} has turned off manhunt. Manhunt has been disabled.`
+          });
+          runtime.stop();
 
           break;
         }
