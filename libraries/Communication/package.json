@@ -5,12 +5,15 @@
   "type": "module",
   "scripts": {
     "build": "npm run build:script && node run build:types",
+    "serve": "gl serve",
     "build:script": "gl build",
     "build:types": "tsc",
-    "serve": "gl serve"
+    "prepare": ""
   },
   "author": "retrozy",
   "devDependencies": {
     "typescript": "^5.9.3"
-  }
+  },
+  "files": ["./lib"],
+  "types": "./lib/index.d.ts"
 }

@@ -61,11 +61,11 @@ api.net.onLoad((_, gamemode) => {
         const op: Ops = identifierBytes[4];
 
         if (op === Ops.TransmittingBoolean) {
-          callbacksForIdentifier.forEach(({ callback }) => {
+          callbacksForIdentifier.forEach(callback => {
             callback(bytes[5] === 1, char);
           });
         } else if (op === Ops.TransmittingByteInteger) {
-          callbacksForIdentifier.forEach(({ callback }) => {
+          callbacksForIdentifier.forEach(callback => {
             callback(bytes[5], char);
           });
         } else {
@@ -110,7 +110,7 @@ api.net.onLoad((_, gamemode) => {
             }
           }
 
-          stateCallbacks.forEach(({ callback }) => {
+          stateCallbacks.forEach(callback => {
             callback(message, char);
           });
 
@@ -121,11 +121,7 @@ api.net.onLoad((_, gamemode) => {
   })
 })
 
-let latestCallbackId = 0;
-const callbacks = new Map<string, {
-  callbackId: number,
-  callback: Callback
-}[]>();
+const callbacks = new Map<string, Callback[]>();
 
 export class Communications {
   identifier: number[];
@@ -177,8 +173,6 @@ export class Communications {
 
   onMessage(callback: Callback) {
     const identifierString = JSON.stringify(this.identifier);
-    const callbackId = latestCallbackId;
-    latestCallbackId++;
 
     if (!callbacks.get(identifierString)) {
       callbacks.set(identifierString, []);
@@ -186,13 +180,10 @@ export class Communications {
 
     const pluginCallbacks = callbacks.get(identifierString)!;
 
-    pluginCallbacks.push({
-      callbackId,
-      callback
-    });
+    pluginCallbacks.push(callback);
 
     return () => {
-      pluginCallbacks.filter(c => c.callbackId !== callbackId);
+      pluginCallbacks.filter(c => c !== callback);
     };
   }
 }

@@ -81,7 +81,7 @@ export default class Manhunt {
       (x + global.settings.hitRange) >= swingStartPosition.x,
       (x - global.settings.hitRange) <= swingEndPosition.x,
       (x + global.settings.hitRange) >= swingEndPosition.x,
-      //Y is reversed, ground is larger and sky is smaller
+      //Y is reversed; ground is larger and sky is smaller
       (y - global.settings.hitRange) >= swingStartPosition.y,
       (y + global.settings.hitRange) <= swingStartPosition.y,
       (y - global.settings.hitRange) >= swingEndPosition.y,
@@ -90,7 +90,6 @@ export default class Manhunt {
 
     if (!wasHitConditions.some(c => c)) return;
 
-    const opName = ('Damage' + String(swing.damage)) as keyof typeof Ops;
     this.send(swing.damage);
     this.handleHealthChange(this.me.id, swing.damage)
   }
