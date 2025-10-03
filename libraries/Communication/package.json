@@ -1,5 +1,5 @@
 {
-  "name": "communication",
+  "name": "gimloader-communication",
   "version": "1.0.0",
   "description": "Send and listen for arbitrary messages between different clients in 2D gamemodes",
   "type": "module",

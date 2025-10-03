@@ -1,5 +1,4 @@
-import { pluginName } from "./consts";
-import global from './global.svelte';
+import shared from './shared.svelte';
 import Manhunt from "./manhunt";
 import { Ops, Types, type Payload } from "./messages";
 import Settings from './Settings.svelte';
@@ -8,12 +7,10 @@ import type { notification } from "antd";
 type Notification = typeof notification;
 
 api.net.onLoad(() => {
-  const Communications = api.lib('Communications').Communications;
-  const comms = new Communications(pluginName);
-  comms.send(Ops.IHaveManhunt);
+  shared.send(Ops.IHaveManhunt);
 
   api.onStop(() => {
-    comms.send(Ops.TurningOffManhunt);
+    shared.send(Ops.TurningOffManhunt);
   });
 
   const myId: string = api.stores.network.authId;
@@ -21,7 +18,7 @@ api.net.onLoad(() => {
 
   let runtime: Manhunt;
 
-  comms.onMessage((message, player) => {
+  shared.onMessage((message, player) => {
     if (typeof message === 'number') {
       switch (message) {
         case Ops.IHaveManhunt: {
@@ -49,11 +46,11 @@ api.net.onLoad(() => {
 
       switch (type) {
         case Types.Settings: {
-          global.setSettings(payload);
+          shared.setSettings(payload);
         }
         case Types.SettingsPatch: {
-          global.setSettings({
-            ...global.settings,
+          shared.setSettings({
+            ...shared.settings,
             ...payload
           });
           break;
@@ -68,11 +65,11 @@ api.net.onLoad(() => {
 
   //todo find these functions
   api.stores.phaser.onStart(() => {
-    runtime = new Manhunt(comms.send);
+    runtime = new Manhunt(shared.send);
   });
   api.stores.phaser.onEnd(() => {
     runtime.stop();
-    runtime = new Manhunt(comms.send);
+    runtime = new Manhunt(shared.send);
   });
 });
 

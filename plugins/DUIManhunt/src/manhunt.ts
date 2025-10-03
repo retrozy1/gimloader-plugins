@@ -1,11 +1,11 @@
 import type { Position } from "./types";
-import global from './global.svelte';
-import { Ops } from './messages';
+import shared from './shared.svelte';
+import { freeze } from './freeze';
 
 //The runtime of the manhunt
 export default class Manhunt {
   private playerHealths = new Map<string, number>;
-  private runnerIds = global.settings.runnerIds;
+  private runnerIds = shared.settings.runnerIds;
 
   private get runnerHealths() {
     const runnerHealths: number[] = [];
@@ -20,7 +20,7 @@ export default class Manhunt {
 
     return {
       id: myId,
-      team: (this.hunterIds.includes(myId) ? 'hunter' : 'runner') as 'hunter' | 'runner',
+      team: this.hunterIds.includes(myId) ? 'hunter' : 'runner' as 'hunter' | 'runner',
       health: this.playerHealths.get(myId)!,
       position: api.stores.phaser.mainCharacter.body as Position
     };
@@ -35,10 +35,10 @@ export default class Manhunt {
 
   constructor (private send: (num: number) => void) {
     this.runnerIds.forEach(id => {
-      this.playerHealths.set(id, global.settings.runnerHealth);
+      this.playerHealths.set(id, shared.settings.runnerHealth);
     });
     this.hunterIds.forEach(id => {
-      this.playerHealths.set(id, global.settings.hunterHealth);
+      this.playerHealths.set(id, shared.settings.hunterHealth);
     });
 
     const { off } = api.net.on('PROJECTILE_CHANGES', this.projectileHandler);
@@ -46,7 +46,7 @@ export default class Manhunt {
       off('PROJECTILE_CHANGES', this.projectileHandler)
     }
 
-    if (this.me.team === 'hunter' && global.settings.frozenUntilRunnerMoves) {
+    if (this.me.team === 'hunter' && shared.settings.frozenUntilRunnerMoves) {
       //todo
     }
   }
@@ -61,7 +61,7 @@ export default class Manhunt {
       //I'm dead
       this.me.health <= 0,
       //It was a swing from someone on my team and friendly fire is off
-      !global.settings.friendlyFire && (
+      !shared.settings.friendlyFire && (
         (
           this.me.team === 'hunter' && this.hunterIds.includes(swing.ownerId)
         ) || (
@@ -77,15 +77,15 @@ export default class Manhunt {
     const swingEndPosition: Position = swing.end;
 
     const wasHitConditions: boolean[] = [
-      (x - global.settings.hitRange) <= swingStartPosition.x,
-      (x + global.settings.hitRange) >= swingStartPosition.x,
-      (x - global.settings.hitRange) <= swingEndPosition.x,
-      (x + global.settings.hitRange) >= swingEndPosition.x,
+      (x - shared.settings.hitRange) <= swingStartPosition.x,
+      (x + shared.settings.hitRange) >= swingStartPosition.x,
+      (x - shared.settings.hitRange) <= swingEndPosition.x,
+      (x + shared.settings.hitRange) >= swingEndPosition.x,
       //Y is reversed; ground is larger and sky is smaller
-      (y - global.settings.hitRange) >= swingStartPosition.y,
-      (y + global.settings.hitRange) <= swingStartPosition.y,
-      (y - global.settings.hitRange) >= swingEndPosition.y,
-      (y + global.settings.hitRange) <= swingEndPosition.y
+      (y - shared.settings.hitRange) >= swingStartPosition.y,
+      (y + shared.settings.hitRange) <= swingStartPosition.y,
+      (y - shared.settings.hitRange) >= swingEndPosition.y,
+      (y + shared.settings.hitRange) <= swingEndPosition.y
     ];
 
     if (!wasHitConditions.some(c => c)) return;
@@ -103,13 +103,13 @@ export default class Manhunt {
       this.stop();
 
       if (api.net.isHost) {
-        //todo end game
+        GL.net.send('END_GAME', undefined);
       }
       return;
     }
 
     if (this.me.health <= 0) {
-      //Freeze myself and play animation
+      freeze();
     }
   }
 }

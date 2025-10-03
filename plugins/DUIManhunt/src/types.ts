@@ -1,4 +1,3 @@
-//The booleans are true because they would be ommited if false (to reduce buffer)
 export interface Settings {
   allowGuestEdits: boolean;
   //Everyone else in the lobby would be the hunters so it only includes runner IDs
@@ -7,9 +6,9 @@ export interface Settings {
   hitRange: number;
   runnerHealth: number;
   hunterHealth: number;
-  runnersCanHit?: true;
-  frozenUntilRunnerMoves?: true;
-  friendlyFire?: true;
+  runnersCanHit: boolean;
+  frozenUntilRunnerMoves: boolean;
+  friendlyFire: boolean;
 }
 
 export interface Position {

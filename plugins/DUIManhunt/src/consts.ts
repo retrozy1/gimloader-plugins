@@ -5,7 +5,9 @@ export const defaultSettings: Settings = {
   hitRange: 50,
   frozenUntilRunnerMoves: true,
   runnersCanHit: true,
-  runnerIds: []
+  runnerIds: [],
+  hunterHealth: 200,
+  runnerHealth: 500
 };
 
 export const pluginName = 'DUIManhunt';

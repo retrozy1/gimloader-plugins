@@ -3,13 +3,15 @@ import type { Settings } from "./types";
 
 type SettingsState = 'home' | 'lobby' | 'playing';
 
+const Communications = api.lib('Communications').Communications;
 const storedSettings: Settings = GL.storage.getValue(pluginName, 'settings', defaultSettings);
 
-export default new class Global {
+export default new class Shared extends Communications {
   settingsState = $state<SettingsState>('home');
   settings = $state<Settings>(storedSettings);
 
   constructor () {
+    super(pluginName);
     $effect(() => {
       this.setSettings(this.settings);
     });
