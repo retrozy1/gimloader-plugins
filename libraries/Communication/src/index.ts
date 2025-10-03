@@ -126,10 +126,19 @@ const callbacks = new Map<string, Callback[]>();
 export class Communications {
   identifier: number[];
 
+  /**
+   * @param pluginName The name the plugin using this library.
+   */
   constructor(pluginName: string) {
     this.identifier = getIdentifier(pluginName);
   }
 
+  /**
+   * Sends a message to clients.
+   * If the message is a number that can be an unsigned integer byte, or a boolean, it will send in a single network message.
+   * Otherwise the message will be broken up into different parts and will be a bit slower.  
+   * @param message The message to send to clients.
+   */
   send(message: Message) {
     switch (typeof message) {
       case 'number': {
@@ -171,6 +180,11 @@ export class Communications {
     }
   }
 
+  /**
+   * Listens for messages.
+   * @param callback The callback to call once a message has been delivered.
+   * @returns A function to remove this listener.
+   */
   onMessage(callback: Callback) {
     const identifierString = JSON.stringify(this.identifier);
 
