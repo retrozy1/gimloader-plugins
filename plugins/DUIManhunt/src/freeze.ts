@@ -1,5 +1,5 @@
 //The `movementSpeed` can be bypassed with spamming, so I just forced the keys to disable.
-//But on-screen buttons exist so I just used it anyway.
+//But on-screen buttons exist so I just used it anyway. let me know if you know how to 
 
 const blockKeys = [
   ' ',
@@ -9,7 +9,7 @@ const blockKeys = [
   'arrowleft',
   'arrowup',
   'arrowright',
-]
+];
 
 const stopInputs = (e: KeyboardEvent) => {
   const key = e.key.toLowerCase();
@@ -17,7 +17,7 @@ const stopInputs = (e: KeyboardEvent) => {
 
   e.preventDefault();
   e.stopPropagation();
-}
+};
 
 export function freeze() {
   document.addEventListener('keydown', stopInputs);
@@ -26,5 +26,6 @@ export function freeze() {
 
 export function unFreeze() {
   document.removeEventListener('keydown', stopInputs);
+  // Default movement speed
   api.stores.me.movementSpeed = 310;
 }
