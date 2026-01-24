@@ -1,36 +1,35 @@
 interface Item {
-  id: string;
-  seasonTicketRequired?: boolean;
+	id: string;
+	seasonTicketRequired?: boolean;
 }
 
 api.net.onLoad(() => {
-  function removeSeasonTicket(items: Item[], destination = items) {
-    const seasonTicketsRequired = new Set<string>();
+	function removeSeasonTicket(items: Item[], destination = items) {
+		for (const item of items) {
+			if (!item.seasonTicketRequired) continue;
+			item.seasonTicketRequired = false;
 
-    for (const item of items) {
-      if (!item.seasonTicketRequired) continue;
-      seasonTicketsRequired.add(item.id);
-      item.seasonTicketRequired = false;
-    }
+			api.onStop(() => {
+				const destinationItem = destination.find((p) => p.id === item.id);
+				if (!destinationItem) return;
+				destinationItem.seasonTicketRequired = true;
+			});
+		}
+	}
 
-    api.onStop(() => {
-      for (const itemId of seasonTicketsRequired) {
-        destination.find(p => p.id === itemId)!.seasonTicketRequired = true;
-      }
-    })
-  }
+	const { worldOptions } = api.stores;
+	if (worldOptions.hasAllProps) {
+		removeSeasonTicket(worldOptions.propsOptions);
+	} else {
+		api.net.on('ALL_PROPS', (props: Gimloader.Stores.PropOption[]) =>
+			removeSeasonTicket(props, worldOptions.propsOptions)
+		);
+	}
 
-  const { worldOptions } = api.stores;
-  if (worldOptions.hasAllProps) {
-    removeSeasonTicket(worldOptions.propsOptions)
-  } else {
-    api.net.on("ALL_PROPS", (props: Gimloader.Stores.PropOption[]) => removeSeasonTicket(props, worldOptions.propsOptions));
-  }
+	removeSeasonTicket(worldOptions.terrainOptions);
+	removeSeasonTicket(worldOptions.deviceOptions);
+});
 
-  removeSeasonTicket(worldOptions.terrainOptions);
-  removeSeasonTicket(worldOptions.deviceOptions);
-})
-
-api.net.modifyFetchResponse("/api/created-map/basics", (options) => {
-  options.mapLimit = 25;
+api.net.modifyFetchResponse('/api/created-map/basics', (options) => {
+	options.mapLimit = 25;
 });

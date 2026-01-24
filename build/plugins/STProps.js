@@ -9,28 +9,28 @@
 
 // plugins/STProps/src/index.ts
 api.net.onLoad(() => {
-  function removeSeasonTicket(items, destination = items) {
-    const seasonTicketsRequired = /* @__PURE__ */ new Set();
-    for (const item of items) {
-      if (!item.seasonTicketRequired) continue;
-      seasonTicketsRequired.add(item.id);
-      item.seasonTicketRequired = false;
-    }
-    api.onStop(() => {
-      for (const itemId of seasonTicketsRequired) {
-        destination.find((p) => p.id === itemId).seasonTicketRequired = true;
-      }
-    });
-  }
-  const { worldOptions } = api.stores;
-  if (worldOptions.hasAllProps) {
-    removeSeasonTicket(worldOptions.propsOptions);
-  } else {
-    api.net.on("ALL_PROPS", (props) => removeSeasonTicket(props, worldOptions.propsOptions));
-  }
-  removeSeasonTicket(worldOptions.terrainOptions);
-  removeSeasonTicket(worldOptions.deviceOptions);
+	function removeSeasonTicket(items, destination = items) {
+		for (const item of items) {
+			if (!item.seasonTicketRequired) continue;
+			item.seasonTicketRequired = false;
+			api.onStop(() => {
+				const destinationItem = destination.find((p) => p.id === item.id);
+				if (!destinationItem) return;
+				destinationItem.seasonTicketRequired = true;
+			});
+		}
+	}
+	const { worldOptions } = api.stores;
+	if (worldOptions.hasAllProps) {
+		removeSeasonTicket(worldOptions.propsOptions);
+	} else {
+		api.net.on('ALL_PROPS', (props) =>
+			removeSeasonTicket(props, worldOptions.propsOptions)
+		);
+	}
+	removeSeasonTicket(worldOptions.terrainOptions);
+	removeSeasonTicket(worldOptions.deviceOptions);
 });
-api.net.modifyFetchResponse("/api/created-map/basics", (options) => {
-  options.mapLimit = 25;
+api.net.modifyFetchResponse('/api/created-map/basics', (options) => {
+	options.mapLimit = 25;
 });

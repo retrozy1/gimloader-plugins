@@ -1,21 +1,18 @@
 {
-  "compilerOptions": {
-    "strict": true,
-    "target": "es2022",
-    "moduleResolution": "bundler",
-    "jsx": "preserve",
-    "verbatimModuleSyntax": true,
-    "noEmit": true,
-    "skipLibCheck": true,
-    "moduleDetection": "force",
-    "baseUrl": ".",
-    "allowImportingTsExtensions": true,
-    "paths": {
-      "$shared/*": ["./shared/*"]
-    }
-  },
-  "include": [
-    "./plugins/**/*.ts",
-    "./shared/**/*.ts",
-  ]
+	"compilerOptions": {
+		"strict": true,
+		"target": "es2022",
+		"moduleResolution": "bundler",
+		"jsx": "preserve",
+		"verbatimModuleSyntax": true,
+		"noEmit": true,
+		"skipLibCheck": true,
+		"moduleDetection": "force",
+		"baseUrl": ".",
+		"allowImportingTsExtensions": true,
+		"paths": {
+			"$shared/*": ["./shared/*"]
+		}
+	},
+	"include": ["./plugins/**/*.ts", "./shared/**/*.ts"]
 }
