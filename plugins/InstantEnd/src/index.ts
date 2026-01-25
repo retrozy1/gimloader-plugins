@@ -2,7 +2,6 @@ api.net.onLoad(() => {
 	if (!api.net.isHost) return;
 
 	const beforeUnload = () => {
-		if (api.stores.session.gameSession.phase !== 'game') return;
 		api.net.send('KICK_PLAYER', {
 			characterId: api.stores.network.authId
 		});
