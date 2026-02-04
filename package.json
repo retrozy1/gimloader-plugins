@@ -7,12 +7,13 @@
 		"build": "gimloader build",
 		"serve": "gimloader serve",
 		"format": "bunx biome format --write",
-		"lint": "bunx biome lint"
+		"lint": "bunx biome lint",
+		"check": "bunx biome check"
 	},
 	"author": "retrozy",
 	"devDependencies": {
 		"@biomejs/biome": "2.3.12",
-		"@gimloader/build": "^1.2.2",
-		"@types/gimloader": "^1.9.0"
+		"@gimloader/build": "^1.4.0",
+		"@types/gimloader": "^1.10.1"
 	}
 }
