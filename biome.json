@@ -5,17 +5,53 @@
 		"clientKind": "git",
 		"useIgnoreFile": true
 	},
-	"files": {
-		"ignoreUnknown": false
-	},
 	"formatter": {
 		"enabled": true,
 		"indentStyle": "tab"
 	},
+	"files": {
+		"includes": ["./plugins/**/*", "./libraries/**/*", "./shared/**/*"]
+	},
+	"overrides": [
+		{
+			"includes": ["**/*.svelte"],
+			"linter": {
+				"rules": {
+					"style": {
+						"useConst": "off",
+						"useImportType": "off"
+					},
+					"correctness": {
+						"noUnusedVariables": "off",
+						"noUnusedImports": "off"
+					}
+				}
+			}
+		}
+	],
 	"linter": {
 		"enabled": true,
 		"rules": {
-			"recommended": true
+			"a11y": "off",
+			"correctness": {
+				"noConstructorReturn": "off"
+			},
+			"style": {
+				"noNonNullAssertion": "off",
+				"useTemplate": "off"
+			},
+			"complexity": {
+				"noArguments": "off",
+				"noBannedTypes": "off",
+				"noStaticOnlyClass": "off",
+				"noThisInStatic": "off"
+			},
+			"suspicious": {
+				"noConfusingVoidType": "off",
+				"useIterableCallbackReturn": "off",
+				"noAssignInExpressions": "off",
+				"noExplicitAny": "off"
+			}
 		}
 	},
 	"javascript": {

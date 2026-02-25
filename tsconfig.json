@@ -14,5 +14,5 @@
 			"$shared/*": ["./shared/*"]
 		}
 	},
-	"include": ["./plugins/**/*.ts", "./shared/**/*.ts"]
+	"include": ["./plugins/**/*.ts", "./shared/**/*.ts", "./main.d.ts"]
 }
