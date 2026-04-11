@@ -10,16 +10,16 @@
 // plugins/ExternalFishValues/src/index.ts
 var started = false;
 var fishValues = {
-  "gray": 1,
-  "green": 2,
-  "red": 5,
-  "blue": 10,
-  "purple": 20,
-  "beach": 40,
-  "star": 65,
-  "galaxy": 100,
-  "berry": 150,
-  "gim": 5e3
+  gray: 1,
+  green: 2,
+  red: 5,
+  blue: 10,
+  purple: 20,
+  beach: 40,
+  star: 65,
+  galaxy: 100,
+  berry: 150,
+  gim: 5e3
 };
 function start(char) {
   const div = document.createElement("div");
@@ -44,7 +44,7 @@ function start(char) {
 if (api.net.isHost) {
   api.net.onLoad(() => {
     api.onStop(
-      api.net.room.state.characters.onAdd((char) => {
+      api.net.state.characters.onAdd((char) => {
         if (started || char.id === api.stores.network.authId) return;
         started = true;
         start(char);

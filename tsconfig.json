@@ -8,11 +8,11 @@
 		"noEmit": true,
 		"skipLibCheck": true,
 		"moduleDetection": "force",
-		"baseUrl": ".",
 		"allowImportingTsExtensions": true,
 		"paths": {
 			"$shared/*": ["./shared/*"]
-		}
+		},
+		"types": ["gimloader"]
 	},
 	"include": ["./plugins/**/*.ts", "./shared/**/*.ts", "./main.d.ts"]
 }
