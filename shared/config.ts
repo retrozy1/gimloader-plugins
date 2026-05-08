@@ -1,19 +1,43 @@
-import type { SingleConfig } from '@gimloader/build';
+import { type SingleConfig, singleConfig } from '@gimloader/build';
 
-type PluginConfig = Omit<
+type DistributiveOmit<T, K extends keyof T> = T extends any
+	? Omit<T, K>
+	: never;
+type ConfigInfo = DistributiveOmit<
 	SingleConfig,
-	| 'isLibrary'
-	| 'type'
-	| 'author'
-	| 'downloadUrl'
-	| 'webpage'
-	| 'outdir'
-	| 'input'
+	'downloadUrl' | 'webpage' | 'author'
 >;
+type Category = 'libraries' | 'plugins';
 
-export const pluginConfig = (config: PluginConfig): SingleConfig => ({
-	...config,
-	author: 'retrozy',
-	input: 'src/index.ts',
-	downloadUrl: `https://raw.githubusercontent.com/retrozy1/gimloader-plugins/main/build/plugins/${config.name}.js`
-});
+export const baseDownloadUrl =
+	'https://raw.githubusercontent.com/Gimloader/builds/main';
+export const baseWebpageUrl = 'https://gimloader.github.io';
+
+function mapDependency(category: Category) {
+	return (dependency: string) => {
+		if (dependency.includes('|')) return dependency;
+		return `${dependency} | ${baseDownloadUrl}/${category}/${dependency}.js`;
+	};
+}
+
+export function pluginConfig(info: ConfigInfo) {
+	const { needsPlugins, needsLibs, optionalLibs, ...options } = info;
+
+	const category: Category = info.isLibrary ? 'libraries' : 'plugins';
+	const downloadUrl = `${baseDownloadUrl}/${category}/${info.name}.js`;
+	const webpage = `${baseWebpageUrl}/${category}/${info.name}`;
+
+	const formattedNeedsPlugins = needsPlugins?.map(mapDependency('plugins'));
+	const formattedNeedsLibs = needsLibs?.map(mapDependency('libraries'));
+	const formattedOptionalLibs = optionalLibs?.map(mapDependency('libraries'));
+
+	return singleConfig({
+		...options,
+		author: 'retrozy',
+		downloadUrl,
+		webpage,
+		needsPlugins: formattedNeedsPlugins,
+		needsLibs: formattedNeedsLibs,
+		optionalLibs: formattedOptionalLibs
+	});
+}
