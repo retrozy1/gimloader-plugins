@@ -15,6 +15,7 @@
 		"@biomejs/biome": "2.3.12",
 		"@gimloader/build": "^1.5.1",
 		"@types/gimloader": "^1.12.0",
+		"@types/howler": "^2.2.12",
 		"client-plugins": "github:Gimloader/client-plugins",
 		"esbuild-svelte": "^0.9.4",
 		"svelte": "^5.55.1",

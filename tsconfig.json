@@ -12,7 +12,7 @@
 		"paths": {
 			"$shared/*": ["./shared/*"]
 		},
-		"types": ["gimloader"]
+		"types": ["gimloader", "howler"]
 	},
 	"include": ["./plugins/**/*.ts", "./shared/**/*.ts", "./main.d.ts"]
 }
