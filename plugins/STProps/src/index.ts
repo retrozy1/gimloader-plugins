@@ -21,7 +21,7 @@ api.net.onLoad(() => {
 	if (worldOptions.hasAllProps) {
 		removeSeasonTicket(worldOptions.propsOptions);
 	} else {
-		api.net.on('ALL_PROPS', (props: Gimloader.Stores.PropOption[]) =>
+		api.net.colyseus.on('ALL_PROPS', (props: Gimloader.Stores.PropOption[]) =>
 			removeSeasonTicket(props, worldOptions.propsOptions)
 		);
 	}

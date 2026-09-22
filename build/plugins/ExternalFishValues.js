@@ -3,7 +3,7 @@
  * @description plugin for benji
  * @author retrozy
  * @version 1.0.0
- * @downloadUrl https://raw.githubusercontent.com/retrozy1/gimloader-plugins/main/build/plugins/ExternalFishValues.js
+ * @downloadUrl https://raw.githubusercontent.com/retrozy1/gimloader-plugins/main/plugins/ExternalFishValues.js
  * @gamemode fishtopia
  */
 

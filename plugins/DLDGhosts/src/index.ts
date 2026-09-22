@@ -1,4 +1,4 @@
-import type { IRecording } from 'client-plugins/plugins/InputRecorder/types';
+import type { Recording } from 'client-plugins/plugins/InputRecorder/src/types';
 import { mount, unmount } from 'svelte';
 import Ghosts from './Ghosts.svelte';
 import type { Ghost } from './types';
@@ -39,7 +39,7 @@ const nops = {
 
 function createGhost(
 	id: string,
-	recording: IRecording,
+	recording: Recording,
 	name: string,
 	skinId: string
 ) {
@@ -174,7 +174,7 @@ api.net.onLoad(() => {
 			)
 				continue;
 
-			const startGhost = (recording: IRecording) => {
+			const startGhost = (recording: Recording) => {
 				const remove = createGhost(
 					ghost.id,
 					recording,

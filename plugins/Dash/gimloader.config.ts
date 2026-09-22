@@ -2,6 +2,7 @@ import { pluginConfig } from '../../shared/config.ts';
 
 export default pluginConfig({
 	name: 'Dash',
+	input: 'src/index.ts',
 	description:
 		"Allows you to dash and 'boost' your character in the direction you are facing",
 	version: '0.1.0',

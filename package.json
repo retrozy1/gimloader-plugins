@@ -13,15 +13,18 @@
 	"author": "retrozy",
 	"devDependencies": {
 		"@biomejs/biome": "2.3.12",
-		"@gimloader/build": "^1.5.1",
-		"@types/gimloader": "^1.12.0",
-		"@types/howler": "^2.2.12",
+		"@gimloader/build": "^1.6.1",
+		"@types/gimloader": "^1.12.2",
+		"@types/howler": "^2.2.13",
 		"client-plugins": "github:Gimloader/client-plugins",
-		"esbuild-svelte": "^0.9.4",
-		"svelte": "^5.55.1",
-		"svelte-preprocess": "^6.0.3",
-		"typescript": "^6.0.2"
+		"esbuild-svelte": "^0.9.5",
+		"svelte": "^5.57.1",
+		"svelte-preprocess": "^6.0.5",
+		"typescript": "^6.0.3"
 	},
+  "paths": {
+    "$shared/*": ["./shared/*"]
+  },
 	"dependencies": {
 		"eventemitter3": "^5.0.4"
 	}

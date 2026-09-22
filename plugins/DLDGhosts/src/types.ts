@@ -1,10 +1,10 @@
-import type { IRecording } from 'client-plugins/plugins/InputRecorder/types';
+import type { Recording } from 'client-plugins/plugins/InputRecorder/src/types';
 
 export interface Ghost {
 	enabled: boolean;
 	name: string;
 	skinId: string;
 	mode: 'onTeleport' | 'onMovementAfterTeleport';
-	recording: IRecording;
+	recording: Recording;
 	id: string;
 }

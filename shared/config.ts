@@ -10,8 +10,7 @@ type ConfigInfo = DistributiveOmit<
 type Category = 'libraries' | 'plugins';
 
 export const baseDownloadUrl =
-	'https://raw.githubusercontent.com/Gimloader/builds/main';
-export const baseWebpageUrl = 'https://gimloader.github.io';
+	'https://raw.githubusercontent.com/retrozy1/gimloader-plugins/main';
 
 function mapDependency(category: Category) {
 	return (dependency: string) => {
@@ -25,7 +24,6 @@ export function pluginConfig(info: ConfigInfo) {
 
 	const category: Category = info.isLibrary ? 'libraries' : 'plugins';
 	const downloadUrl = `${baseDownloadUrl}/${category}/${info.name}.js`;
-	const webpage = `${baseWebpageUrl}/${category}/${info.name}`;
 
 	const formattedNeedsPlugins = needsPlugins?.map(mapDependency('plugins'));
 	const formattedNeedsLibs = needsLibs?.map(mapDependency('libraries'));
@@ -35,7 +33,6 @@ export function pluginConfig(info: ConfigInfo) {
 		...options,
 		author: 'retrozy',
 		downloadUrl,
-		webpage,
 		needsPlugins: formattedNeedsPlugins,
 		needsLibs: formattedNeedsLibs,
 		optionalLibs: formattedOptionalLibs

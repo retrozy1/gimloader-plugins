@@ -7,5 +7,6 @@ export default pluginConfig({
 	gamemodes: ['dontlookdown'],
 	needsPlugins: [
 		'Savestates | https://raw.githubusercontent.com/Gimloader/client-plugins/refs/heads/main/build/plugins/Savestates.js'
-	]
+	],
+	input: 'src/index.ts'
 });

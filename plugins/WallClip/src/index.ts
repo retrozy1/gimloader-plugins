@@ -95,10 +95,10 @@ api.hotkeys.addConfigurableHotkey(
 );
 
 api.net.onLoad(() => {
-	api.net.on('PHYSICS_STATE', () => {
+	api.net.colyseus.on('PHYSICS_STATE', () => {
 		if (!interval) return;
 		stopInterval();
-		api.notification.error({
+		api.UI.notification.error({
 			message: 'Clip canceled due to lag back'
 		});
 	});

@@ -1,5 +1,5 @@
 <script lang="ts">
-import type { IRecording } from 'client-plugins/plugins/InputRecorder/types';
+import type { Recording } from 'client-plugins/plugins/InputRecorder/src/types';
 import type { Ghost } from './types';
 
 interface Props {
@@ -52,7 +52,7 @@ function uploadJson<T = unknown>(): Promise<T> {
 
 async function addGhost() {
 	try {
-		const recording = await uploadJson<IRecording>();
+		const recording = await uploadJson<Recording>();
 
 		ghosts.push({
 			enabled: true,
